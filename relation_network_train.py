@@ -3,7 +3,7 @@ import tensorflow as tf
 import tqdm
 
 from relation_network import *
-from relation_network_params import *
+from relation_network_train_params import *
 from relation_network_train_functions import *
 
 ########################################################################
@@ -84,11 +84,7 @@ rn.compile(optimizer=optimizer, loss=loss, metrics=['accuracy'])
 # TRAIN
 ########################################################################
 
-checkpointAndMakePlots = CheckpointAndMakePlots()
-
-# Train params
-batch_size = 1024
-epochs = 100
+checkpointAndMakePlots = CheckpointAndMakePlots(save_dir=experiment_dir)
 
 # Fit
 rn.fit(x=[scenes_input_train, questions_input_train], y=[one_hot_answers_train],

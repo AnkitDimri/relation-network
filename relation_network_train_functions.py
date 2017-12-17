@@ -16,9 +16,9 @@ from keras.callbacks import Callback
 class CheckpointAndMakePlots(Callback):
 
     # Init
-    def __init__(self, file_name_pre="rn", this_assessor_save_dir="."):
+    def __init__(self, file_name_pre="rn", save_dir="."):
         self.file_name_pre = file_name_pre
-        self.this_assessor_save_dir = this_assessor_save_dir
+        self.save_dir = save_dir
 
     # On train start
     def on_train_begin(self, logs={}):
@@ -57,22 +57,22 @@ class CheckpointAndMakePlots(Callback):
 
     # Save model checkpoint
     def save_model_checkpoint(self, epoch, tl, ta, vl, va):
-        model_file_path = os.path.join(self.this_assessor_save_dir,
+        model_file_path = os.path.join(self.save_dir,
             self.file_name_pre + "_epoch{0:03d}_tl{1:.4f}_ta{2:.4f}_vl{3:.4f}_va{4:.4f}.hdf5".format(epoch, tl, ta, vl, va))
         print("Saving model", model_file_path)
         self.model.save_weights(model_file_path)
 
     def save_history(self):
-        print("Saving history in", self.this_assessor_save_dir)
-        np.savetxt(os.path.join(self.this_assessor_save_dir, self.file_name_pre + "_train_loss_history.txt"), self.train_losses, delimiter=",")
-        np.savetxt(os.path.join(self.this_assessor_save_dir, self.file_name_pre + "_train_acc_history.txt"), self.train_accuracies, delimiter=",")
-        np.savetxt(os.path.join(self.this_assessor_save_dir, self.file_name_pre + "_val_loss_history.txt"), self.val_losses, delimiter=",")
-        np.savetxt(os.path.join(self.this_assessor_save_dir, self.file_name_pre + "_val_acc_history.txt"), self.val_accuracies, delimiter=",")
+        print("Saving history in", self.save_dir)
+        np.savetxt(os.path.join(self.save_dir, self.file_name_pre + "_train_loss_history.txt"), self.train_losses, delimiter=",")
+        np.savetxt(os.path.join(self.save_dir, self.file_name_pre + "_train_acc_history.txt"), self.train_accuracies, delimiter=",")
+        np.savetxt(os.path.join(self.save_dir, self.file_name_pre + "_val_loss_history.txt"), self.val_losses, delimiter=",")
+        np.savetxt(os.path.join(self.save_dir, self.file_name_pre + "_val_acc_history.txt"), self.val_accuracies, delimiter=",")
 
     # Plot and save losses and accuracies
     def plot_and_save_losses_and_accuracies(self, epoch):
         print("Saving plot for epoch", str(epoch), ":",
-            os.path.join(self.this_assessor_save_dir, self.file_name_pre + "_plots.png"))
+            os.path.join(self.save_dir, self.file_name_pre + "_plots.png"))
 
         plt.subplot(121)
         plt.plot(self.train_losses, label='train_loss')
@@ -99,7 +99,7 @@ class CheckpointAndMakePlots(Callback):
         plt.tight_layout()
         # plt.subplots_adjust(top=0.85)
         plt.suptitle(self.file_name_pre, fontsize=10)
-        plt.savefig(os.path.join(self.this_assessor_save_dir,
+        plt.savefig(os.path.join(self.save_dir,
                                  self.file_name_pre + "_plots_loss_acc.png"))
         plt.close()
 
